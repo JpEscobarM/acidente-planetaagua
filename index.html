@@ -16,54 +16,46 @@
     }
     .container {
       background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       text-align: center;
-      width: 350px;
+      width: 300px;
     }
     h1 {
-      font-size: 30px;
+      font-size: 24px;
       font-weight: bold;
-      margin-bottom: 30px;
-      color: #004D73;
+      margin-bottom: 20px;
     }
     .counter {
-      font-size: 40px;
+      font-size: 36px;
       font-weight: bold;
-      margin: 30px 0;
-      color: #0074A2;
+      margin: 20px 0;
     }
-    .last-accident {
-      font-size: 16px;
-      color: #333;
-      margin-top: 15px;
-    }
-    .admin-panel {
-      margin-top: 30px;
-    }
-    .admin-panel input {
-      padding: 8px;
-      font-size: 16px;
-      border: 1px solid #ccc;
+    button {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
       border-radius: 5px;
-      margin-right: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #c0392b;
     }
     .hidden {
       display: none;
     }
-    button {
-      background-color: #0074A2;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
+    .admin-panel {
+      margin-top: 20px;
     }
-    button:hover {
-      background-color: #005F8A;
+    .admin-panel input {
+      padding: 5px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
     }
   </style>
 </head>
@@ -71,7 +63,6 @@
   <div class="container">
     <h1>DIAS</h1>
     <div class="counter" id="counter">Carregando...</div>
-    <div class="last-accident" id="lastAccident">Último acidente: Carregando...</div>
     <div id="adminPanel" class="admin-panel hidden">
       <input type="text" id="dateInput" placeholder="dd/mm/aaaa" />
       <button onclick="setAccidentDate()">Atualizar Data</button>
@@ -81,49 +72,63 @@
   </div>
 
   <script>
-    const BACKEND_URL = "https://backendacidente-production.up.railway.app";
+    const BACKEND_URL = "https://backendacidente-production.up.railway.app"; // Substitua pela URL real do backend
 
     async function fetchLastAccident() {
       try {
-        console.log("Buscando dados da API...");
         const response = await fetch(`${BACKEND_URL}/accident`);
-        if (!response.ok) throw new Error(`Erro ${response.status}: ${response.statusText}`);
-        
         const data = await response.json();
-        console.log("Dados recebidos:", data);
-        
-        if (data && data.lastAccident) {
-          const lastAccidentDate = new Date(data.lastAccident);
-          if (isNaN(lastAccidentDate.getTime())) {
-            throw new Error("Data do último acidente inválida");
-          }
-          document.getElementById('lastAccident').textContent = `Último acidente: ${lastAccidentDate.toLocaleDateString('pt-BR')}`;
-          startCounter(lastAccidentDate);
+        if (data.lastAccident) {
+          updateCounter(data.lastAccident);
         } else {
           document.getElementById('counter').textContent = "Nenhuma data registrada.";
-          document.getElementById('lastAccident').textContent = "Último acidente: Não registrado.";
         }
       } catch (error) {
         console.error("Erro ao buscar a data do último acidente:", error);
         document.getElementById('counter').textContent = "Erro ao carregar.";
-        document.getElementById('lastAccident').textContent = "Erro ao carregar a data.";
       }
     }
 
-    function startCounter(lastAccident) {
-      function updateCounter() {
-        const now = new Date();
-        const diff = now - lastAccident;
-        
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-        
-        document.getElementById('counter').textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    function getTimeSince(lastAccident) {
+      const now = new Date();
+      const lastDate = new Date(lastAccident);
+      const diff = now - lastDate;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      return { days, hours, minutes, seconds };
+    }
+
+    function updateCounter(lastAccident) {
+      const timeSince = getTimeSince(lastAccident);
+      document.getElementById('counter').textContent = `${timeSince.days}d ${timeSince.hours}h ${timeSince.minutes}m ${timeSince.seconds}s`;
+    }
+
+    async function setAccidentDate() {
+      const dateInput = document.getElementById('dateInput').value;
+      const dateParts = dateInput ? dateInput.split("/") : null;
+      if (dateParts && dateParts.length === 3) {
+        const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T00:00:00`;
+
+        try {
+          const response = await fetch(`${BACKEND_URL}/accident`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ date: formattedDate }),
+          });
+
+          const result = await response.json();
+          alert(result.message);
+          updateCounter(formattedDate);
+        } catch (error) {
+          console.error("Erro ao atualizar a data:", error);
+        }
+      } else {
+        alert("Formato inválido. Use dd/mm/aaaa.");
       }
-      updateCounter();
-      setInterval(updateCounter, 1000);
     }
 
     function checkAdmin() {
@@ -142,42 +147,10 @@
       alert("Você saiu do modo administrador.");
     }
 
-    async function setAccidentDate() {
-  const dateInput = document.getElementById("dateInput").value;
-  
-  if (!dateInput) {
-    alert("Por favor, insira uma data.");
-    return;
-  }
-
-  // Formatar a data para YYYY-MM-DD
-  const [dia, mes, ano] = dateInput.split("/");
-  const formattedDate = `${ano}-${mes}-${dia}`;
-
-  try {
-    const response = await fetch(`${BACKEND_URL}/accident`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ date: formattedDate }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Erro ${response.status}: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    alert("Data do acidente atualizada com sucesso!");
-    fetchLastAccident(); // Atualizar a tela com a nova data
-  } catch (error) {
-    console.error("Erro ao atualizar a data do acidente:", error);
-    alert("Erro ao atualizar a data.");
-  }
-}
-
-
+    // Buscar o último acidente ao carregar a página
     fetchLastAccident();
+    // Atualizar contador a cada segundo
+    setInterval(() => fetchLastAccident(), 1000);
   </script>
 </body>
 </html>
