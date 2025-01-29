@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dias Sem Acidente</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .counter {
+      font-size: 36px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    button {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #c0392b;
+    }
+    .hidden {
+      display: none;
+    }
+    .admin-panel {
+      margin-top: 20px;
+    }
+    .admin-panel input {
+      padding: 5px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dias Sem Acidente</h1>
+    <div class="counter" id="counter">0d 0h 0m 0s</div>
+    <div id="adminPanel" class="admin-panel hidden">
+      <input type="text" id="dateInput" placeholder="dd/mm/aaaa" />
+      <button onclick="setAccidentDate()">Atualizar Data</button>
+      <button onclick="logoutAdmin()">Sair</button>
+    </div>
+    <button id="adminButton" onclick="checkAdmin()">Entrar como Admin</button>
+  </div>
+
+  <script>
+    function getTimeSince(lastAccident) {
+      const now = new Date();
+      const lastDate = new Date(lastAccident);
+      const diff = now - lastDate;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      return { days, hours, minutes, seconds };
+    }
+
+    function updateCounter() {
+      const lastAccident = localStorage.getItem('lastAccident');
+      if (!lastAccident) {
+        localStorage.setItem('lastAccident', new Date().toISOString());
+      }
+      const timeSince = getTimeSince(localStorage.getItem('lastAccident'));
+      document.getElementById('counter').textContent = `${timeSince.days}d ${timeSince.hours}h ${timeSince.minutes}m ${timeSince.seconds}s`;
+    }
+
+    function setAccidentDate() {
+      const dateInput = document.getElementById('dateInput').value;
+      const dateParts = dateInput ? dateInput.split("/") : null;
+      if (dateParts && dateParts.length === 3) {
+        const formattedDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T00:00:00`);
+        if (!isNaN(formattedDate.getTime()) && formattedDate <= new Date()) {
+          localStorage.setItem('lastAccident', formattedDate.toISOString());
+          updateCounter();
+          alert("Data do último acidente atualizada com sucesso!");
+        } else {
+          alert("Data inválida. Certifique-se de que a data está no formato correto e não é no futuro.");
+        }
+      } else {
+        alert("Formato inválido. Use dd/mm/aaaa.");
+      }
+    }
+
+    function checkAdmin() {
+      const isAdmin = prompt("Digite a senha de administrador:") === "admin";
+      if (isAdmin) {
+        document.getElementById('adminPanel').classList.remove('hidden');
+        document.getElementById('adminButton').classList.add('hidden');
+      } else {
+        alert("Acesso negado.");
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('adminButton').classList.remove('hidden');
+      alert("Você saiu do modo administrador.");
+    }
+
+    // Update the counter every second
+    setInterval(updateCounter, 1000);
+    updateCounter();
+  </script>
+</body>
+</html>
