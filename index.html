@@ -1,6 +1,5 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,7 +61,7 @@
 <body>
   <div class="container">
     <h1>Dias Sem Acidente</h1>
-    <div class="counter" id="counter">0d 0h 0m 0s</div>
+    <div class="counter" id="counter">Carregando...</div>
     <div id="adminPanel" class="admin-panel hidden">
       <input type="text" id="dateInput" placeholder="dd/mm/aaaa" />
       <button onclick="setAccidentDate()">Atualizar Data</button>
@@ -72,6 +71,23 @@
   </div>
 
   <script>
+    const BACKEND_URL = "https://meu-backend-railway.app"; // Substitua pela URL real do backend
+
+    async function fetchLastAccident() {
+      try {
+        const response = await fetch(`${BACKEND_URL}/accident`);
+        const data = await response.json();
+        if (data.lastAccident) {
+          updateCounter(data.lastAccident);
+        } else {
+          document.getElementById('counter').textContent = "Nenhuma data registrada.";
+        }
+      } catch (error) {
+        console.error("Erro ao buscar a data do último acidente:", error);
+        document.getElementById('counter').textContent = "Erro ao carregar.";
+      }
+    }
+
     function getTimeSince(lastAccident) {
       const now = new Date();
       const lastDate = new Date(lastAccident);
@@ -85,26 +101,29 @@
       return { days, hours, minutes, seconds };
     }
 
-    function updateCounter() {
-      const lastAccident = localStorage.getItem('lastAccident');
-      if (!lastAccident) {
-        localStorage.setItem('lastAccident', new Date().toISOString());
-      }
-      const timeSince = getTimeSince(localStorage.getItem('lastAccident'));
+    function updateCounter(lastAccident) {
+      const timeSince = getTimeSince(lastAccident);
       document.getElementById('counter').textContent = `${timeSince.days}d ${timeSince.hours}h ${timeSince.minutes}m ${timeSince.seconds}s`;
     }
 
-    function setAccidentDate() {
+    async function setAccidentDate() {
       const dateInput = document.getElementById('dateInput').value;
       const dateParts = dateInput ? dateInput.split("/") : null;
       if (dateParts && dateParts.length === 3) {
-        const formattedDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T00:00:00`);
-        if (!isNaN(formattedDate.getTime()) && formattedDate <= new Date()) {
-          localStorage.setItem('lastAccident', formattedDate.toISOString());
-          updateCounter();
-          alert("Data do último acidente atualizada com sucesso!");
-        } else {
-          alert("Data inválida. Certifique-se de que a data está no formato correto e não é no futuro.");
+        const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T00:00:00`;
+
+        try {
+          const response = await fetch(`${BACKEND_URL}/accident`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ date: formattedDate }),
+          });
+
+          const result = await response.json();
+          alert(result.message);
+          updateCounter(formattedDate);
+        } catch (error) {
+          console.error("Erro ao atualizar a data:", error);
         }
       } else {
         alert("Formato inválido. Use dd/mm/aaaa.");
@@ -127,9 +146,10 @@
       alert("Você saiu do modo administrador.");
     }
 
-    // Update the counter every second
-    setInterval(updateCounter, 1000);
-    updateCounter();
+    // Buscar o último acidente ao carregar a página
+    fetchLastAccident();
+    // Atualizar contador a cada segundo
+    setInterval(() => fetchLastAccident(), 1000);
   </script>
 </body>
 </html>
