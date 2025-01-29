@@ -8,11 +8,14 @@
     body {
       font-family: Arial, sans-serif;
       background-image: url("./background.png");
+      background-size: cover;
+      background-position: center;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+      padding: 10px;
     }
     .container {
       background: white;
@@ -20,7 +23,13 @@
       border-radius: 10px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       text-align: center;
-      width: 300px;
+      width: 90%;
+      max-width: 400px;
+
+      position: relative;
+      top: -40px; /* Sobe 40 pixels */
+     transform: translateY(-10%);
+
     }
     h1 {
       font-size: 24px;
@@ -30,7 +39,7 @@
     .counter {
       font-size: 36px;
       font-weight: bold;
-      margin: 20px 0;
+      margin: 30px;
     }
     button {
       background-color: #e74c3c;
@@ -40,6 +49,9 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 16px;
+      width: 100%;
+      max-width: 200px;
+      margin-top: 10px;
     }
     button:hover {
       background-color: #c0392b;
@@ -51,11 +63,41 @@
       margin-top: 20px;
     }
     .admin-panel input {
-      padding: 5px;
+      padding: 8px;
       font-size: 14px;
       border: 1px solid #ccc;
       border-radius: 5px;
-      margin-right: 10px;
+      width: 100%;
+      max-width: 200px;
+      margin-bottom: 10px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
+      body {
+        height: auto;
+        padding: 20px;
+      }
+      .container {
+        padding: 15px;
+        width: 100%;
+        max-width: 350px;
+      }
+      h1 {
+        font-size: 20px;
+      }
+      .counter {
+        font-size: 30px;
+        margin: 20px;
+      }
+      button {
+        font-size: 14px;
+        padding: 8px;
+      }
+      .admin-panel input {
+        font-size: 12px;
+        padding: 6px;
+      }
     }
   </style>
 </head>
