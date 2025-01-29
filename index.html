@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #0074A2;
+      background-image: url("./background.png");
       display: flex;
       justify-content: center;
       align-items: center;
@@ -23,7 +23,8 @@
       width: 350px;
     }
     h1 {
-      font-size: 26px;
+      font-size: 30px;
+      font-weight: bold;
       margin-bottom: 30px;
       color: #004D73;
     }
@@ -68,7 +69,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Dias Sem Acidente</h1>
+    <h1>DIAS</h1>
     <div class="counter" id="counter">Carregando...</div>
     <div class="last-accident" id="lastAccident">Último acidente: Carregando...</div>
     <div id="adminPanel" class="admin-panel hidden">
@@ -140,6 +141,41 @@
       document.getElementById('adminButton').classList.remove('hidden');
       alert("Você saiu do modo administrador.");
     }
+
+    async function setAccidentDate() {
+  const dateInput = document.getElementById("dateInput").value;
+  
+  if (!dateInput) {
+    alert("Por favor, insira uma data.");
+    return;
+  }
+
+  // Formatar a data para YYYY-MM-DD
+  const [dia, mes, ano] = dateInput.split("/");
+  const formattedDate = `${ano}-${mes}-${dia}`;
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/accident`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ date: formattedDate }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    alert("Data do acidente atualizada com sucesso!");
+    fetchLastAccident(); // Atualizar a tela com a nova data
+  } catch (error) {
+    console.error("Erro ao atualizar a data do acidente:", error);
+    alert("Erro ao atualizar a data.");
+  }
+}
+
 
     fetchLastAccident();
   </script>
