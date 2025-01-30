@@ -73,14 +73,36 @@
     }
 
     /* Responsividade */
+    @media(max-width: 1000px)
+    {
+      body
+      {
+        background-image: url("./imagemVetorizada.svg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: top center;
+        height: auto;
+      }
+      .container
+      {
+
+        width: 100%;
+        max-width: 400;
+      }
+    }
+
+
+
     @media (max-width: 600px) {
       body {
         position: relative;
-        top: 300px; /*desce */
+        top: 400px; /*desce */
         transform: translateY(+10%);
-        background-image: none;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: top center;
         height: auto;
-        background-color: #005F8A;
+        background-image: url("./imagemVetorizada.svg");
         height: auto;
         padding: 20px;
       }
@@ -106,6 +128,83 @@
         padding: 6px;
       }
     }
+
+    @media (max-width: 450px) {
+      body {
+        position: relative;
+        top: 300px; /*desce */
+        transform: translateY(+10%);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: top center;
+        height: auto;
+        background-image: url("./imagemVetorizada.svg");
+        height: auto;
+        padding: 20px;
+      }
+      .container {
+        
+        padding: 15px;
+        max-height: 175;
+        width: 100%;
+        max-width: 300px;
+      }
+      h1 {
+        font-size: 20px;
+      }
+      .counter {
+        font-size: 20px;
+        margin: 20px;
+      }
+      button {
+        font-size: 14px;
+        padding: 8px;
+      }
+      .admin-panel input {
+        font-size: 12px;
+        padding: 6px;
+      }
+    }
+
+
+    @media (max-width: 360px) {
+      body {
+        position: relative;
+        top: 220px; /*desce */
+        transform: translateY(+10%);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: top center;
+        height: auto;
+        background-image: url("./imagemVetorizada.svg");
+        height: auto;
+        padding: 20px;
+      }
+      .container {
+        
+        padding: 15px;
+        max-height: 175;
+        width: 100%;
+        max-width: 300px;
+      }
+      h1 {
+        font-size: 15px;
+      }
+      .counter {
+        font-size: 20px;
+        margin: 20px;
+      }
+      button {
+        font-size: 14px;
+        padding: 8px;
+      }
+      .admin-panel input {
+        font-size: 12px;
+        padding: 6px;
+      }
+    }
+    
+    
   </style>
 </head>
 <body>
