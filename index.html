@@ -91,7 +91,31 @@
       }
     }
 
+    @media(max-width: 720px)
+    {
+      body {
+        position:relative;
+        top: 500px;
+        background-image: url("./imagemVetorizada.svg");
+        background-size: cover;
+        background-repeat: none;
+        background-position: top center;
+        height: auto
 
+      };
+    }
+
+    @media(max-width: 650px)
+    {
+      body
+      {
+        position: relative;
+        top: 400px;
+        background-position: top center;
+
+      };
+
+    }
 
     @media (max-width: 600px) {
       body {
@@ -220,7 +244,7 @@
   </div>
 
   <script>
-    const BACKEND_URL = "https://backendacidente-production.up.railway.app"; // Substitua pela URL real do backend
+    const BACKEND_URL = "https://backendacidente-production.up.railway.app"; ''
 
     async function fetchLastAccident() {
       try {
@@ -295,9 +319,9 @@
       alert("Você saiu do modo administrador.");
     }
 
-    // Buscar o último acidente ao carregar a página
+
     fetchLastAccident();
-    // Atualizar contador a cada segundo
+ 
     setInterval(() => fetchLastAccident(), 1000);
   </script>
 </body>
