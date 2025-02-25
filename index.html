@@ -235,6 +235,7 @@
   <div class="container">
     <h1>DIAS</h1>
     <div class="counter" id="counter">Carregando...</div>
+    <div class="record" id="record">Recorde: Carregando...</div>
     <div id="adminPanel" class="admin-panel hidden">
       <input type="text" id="dateInput" placeholder="dd/mm/aaaa" />
       <button onclick="setAccidentDate()">Atualizar Data</button>
@@ -260,6 +261,18 @@
         document.getElementById('counter').textContent = "Erro ao carregar.";
       }
     }
+
+    async function fetchRecord() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/record`);
+        const data = await response.json();
+        document.getElementById('record').textContent = `Recorde: ${data.record} dias`;
+    } catch (error) {
+        console.error("Erro ao buscar o recorde:", error);
+        document.getElementById('record').textContent = "Erro ao carregar recorde.";
+    }
+}
+
 
     function getTimeSince(lastAccident) {
       const now = new Date();
@@ -321,8 +334,13 @@
 
 
     fetchLastAccident();
- 
-    setInterval(() => fetchLastAccident(), 1000);
+      fetchRecord(); // Chamar a função para buscar o recorde
+
+    setInterval(() => {
+    fetchLastAccident();
+    fetchRecord(); // Atualizar o recorde periodicamente
+}, 10000); // Atualiza a cada 10 segundos
+
   </script>
 </body>
 </html>
