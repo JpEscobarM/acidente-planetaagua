@@ -235,8 +235,8 @@
   <div class="container">
     <h1>DIAS</h1>
     <div class="counter" id="counter">Carregando...</div>
-    <div class="record" id="record">Recorde: Carregando...</div>
-    <div id="adminPanel" class="admin-panel hidden">
+    <!--<div class="record" id="record">Recorde: Carregando...</div> -->
+    <div id="adminPanel" class="admin-panel hidden">*/
       <input type="text" id="dateInput" placeholder="dd/mm/aaaa" />
       <button onclick="setAccidentDate()">Atualizar Data</button>
       <button onclick="logoutAdmin()">Sair</button>
@@ -262,7 +262,7 @@
       }
     }
 
-    async function fetchRecord() {
+   async function fetchRecord() {
     try {
         const response = await fetch(`${BACKEND_URL}/record`);
         const data = await response.json();
