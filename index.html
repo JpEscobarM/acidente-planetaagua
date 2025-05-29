@@ -245,7 +245,8 @@
   </div>
 
   <script>
-    const BACKEND_URL = "http://acidentes.filtrosplanetaagua.com.br:3001"; 
+   
+    const BACKEND_URL = "http://localhost:3001"; 
 
     async function fetchLastAccident() {
       try {
@@ -261,18 +262,6 @@
         document.getElementById('counter').textContent = "Erro ao carregar.";
       }
     }
-
-   async function fetchRecord() {
-    try {
-        const response = await fetch(`${BACKEND_URL}/record`);
-        const data = await response.json();
-        document.getElementById('record').textContent = `Recorde: ${data.record} dias`;
-    } catch (error) {
-        console.error("Erro ao buscar o recorde:", error);
-        document.getElementById('record').textContent = "Erro ao carregar recorde.";
-    }
-}
-
 
     function getTimeSince(lastAccident) {
       const now = new Date();
@@ -332,15 +321,9 @@
       alert("Você saiu do modo administrador.");
     }
 
-
     fetchLastAccident();
-      fetchRecord(); // Chamar a função para buscar o recorde
-
-    setInterval(() => {
-    fetchLastAccident();
-    fetchRecord(); // Atualizar o recorde periodicamente
-}, 10000); // Atualiza a cada 10 segundos
-
+    setInterval(fetchLastAccident, 10000);
+  
   </script>
 </body>
 </html>
