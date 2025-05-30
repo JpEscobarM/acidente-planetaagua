@@ -244,9 +244,22 @@
     <button id="adminButton" onclick="checkAdmin()">Entrar como Admin</button>
   </div>
 
-  <script>
-   
-    const BACKEND_URL = "http://200.213.37.19:3001"; 
+ <script>
+    let BACKEND_URL;
+
+    const INTERNAL_BACKEND = "##";
+    const EXTERNAL_BACKEND = "##";
+
+    async function defineBackendURL() {
+      try {
+        const response = await fetch(`${INTERNAL_BACKEND}/accident`, { method: 'HEAD' });
+        BACKEND_URL = response.ok ? INTERNAL_BACKEND : EXTERNAL_BACKEND;
+      } catch (err) {
+        BACKEND_URL = EXTERNAL_BACKEND;
+      }
+      fetchLastAccident();
+      setInterval(fetchLastAccident, 10000);
+    }
 
     async function fetchLastAccident() {
       try {
@@ -267,12 +280,10 @@
       const now = new Date();
       const lastDate = new Date(lastAccident);
       const diff = now - lastDate;
-
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
-
       return { days, hours, minutes, seconds };
     }
 
@@ -286,14 +297,12 @@
       const dateParts = dateInput ? dateInput.split("/") : null;
       if (dateParts && dateParts.length === 3) {
         const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T00:00:00`;
-
         try {
           const response = await fetch(`${BACKEND_URL}/accident`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ date: formattedDate }),
           });
-
           const result = await response.json();
           alert(result.message);
           updateCounter(formattedDate);
@@ -321,9 +330,7 @@
       alert("Você saiu do modo administrador.");
     }
 
-    fetchLastAccident();
-    setInterval(fetchLastAccident, 10000);
-  
+    defineBackendURL();
   </script>
 </body>
 </html>
