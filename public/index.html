@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
+
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dias Sem Acidente</title>
+  
+  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  
   <style>
     body {
-      font-family: Arial, sans-serif;
+     font-family: 'Open Sans', sans-serif;
       background-image: url("./background.png");
       background-size: cover;
       background-position: center;
@@ -31,9 +40,19 @@
      transform: translateY(-10%);
 
     }
-    h1 {
-      font-size: 24px;
+
+    .record{
+      font-family: 'Open Sans', sans-serif;
+      font-size: 25px;
       font-weight: bold;
+      margin-bottom: 20px;
+
+    }
+
+    h1 {
+      font-family: 'Open Sans', sans-serif;
+
+      font-weight:700;
       margin-bottom: 20px;
     }
     .counter {
@@ -233,9 +252,11 @@
 </head>
 <body>
   <div class="container">
-    <h1>DIAS</h1>
+
     <div class="counter" id="counter">Carregando...</div>
-    <!--<div class="record" id="record">Recorde: Carregando...</div> -->
+    <div class="record" id="record">Recorde de dias:<div class="recordNum"></div>
+ 
+  </div>
     <div id="adminPanel" class="admin-panel hidden">
       <input type="text" id="dateInput" placeholder="dd/mm/aaaa" />
       <button onclick="setAccidentDate()">Atualizar Data</button>
@@ -245,18 +266,27 @@
   </div>
 
  <script>
-    let BACKEND_URL;
+
+  let BACKEND_URL;
 
     const INTERNAL_BACKEND = "http://localhost:3002";
-    const EXTERNAL_BACKEND = "X";
+    const EXTERNAL_BACKEND = "http://";
+
+      const recordNum = document.querySelector(".recordNum");
+
 
     async function defineBackendURL() {
-     
-      BACKEND_URL = INTERNAL_BACKEND;
-
+      try {
+        const response = await fetch(`${INTERNAL_BACKEND}/accident`, { method: 'HEAD' });
+        BACKEND_URL = response.ok ? INTERNAL_BACKEND : EXTERNAL_BACKEND;
+      } catch (err) {
+        BACKEND_URL = EXTERNAL_BACKEND;
+      }
       fetchLastAccident();
       setInterval(fetchLastAccident, 1000);
     }
+
+    
 
     async function fetchLastAccident() {
       try {
@@ -327,7 +357,26 @@
       alert("Você saiu do modo administrador.");
     }
 
+   async function atualizaRecord()
+    {
+      try {
+        const response = await fetch(`${BACKEND_URL}/record`);
+        const recordSalvo = await response.json();
+
+        recordNum.innerText = recordSalvo.recordDays;
+
+      } catch (error) {
+        console.error("Erro ao buscar ultimo recorde:", error);
+        
+      }
+    }
+
     defineBackendURL();
+
+    atualizaRecord();
+    setInterval(atualizaRecord,10000);
+    
+
   </script>
 </body>
 </html>
