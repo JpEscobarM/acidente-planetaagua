@@ -247,18 +247,15 @@
  <script>
     let BACKEND_URL;
 
-    const INTERNAL_BACKEND = "##";
-    const EXTERNAL_BACKEND = "##";
+    const INTERNAL_BACKEND = "http://localhost:3002";
+    const EXTERNAL_BACKEND = "X";
 
     async function defineBackendURL() {
-      try {
-        const response = await fetch(`${INTERNAL_BACKEND}/accident`, { method: 'HEAD' });
-        BACKEND_URL = response.ok ? INTERNAL_BACKEND : EXTERNAL_BACKEND;
-      } catch (err) {
-        BACKEND_URL = EXTERNAL_BACKEND;
-      }
+     
+      BACKEND_URL = INTERNAL_BACKEND;
+
       fetchLastAccident();
-      setInterval(fetchLastAccident, 10000);
+      setInterval(fetchLastAccident, 1000);
     }
 
     async function fetchLastAccident() {
