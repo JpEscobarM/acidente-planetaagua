@@ -1,276 +1,322 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
-
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dias Sem Acidente</title>
-  
-  
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <script src="index.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
+    :root {
+      --primary-color: #0056b3;
+      --secondary-color: #00a0e9;
+      --accent-color: #ff6b6b;
+      --text-color: #333;
+      --light-bg: rgba(255, 255, 255, 0.9);
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-     font-family: 'Open Sans', sans-serif;
-      background-image: url("./background.png");
+      font-family: 'Roboto', sans-serif;
+       background: linear-gradient(135deg, #007cf0, #00dfd8);
       background-size: cover;
       background-position: center;
+      background-attachment: fixed;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      padding: 10px;
+      min-height: 100vh;
+      color: var(--text-color);
+      padding-top: 0px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 40px;
+      position: relative;
     }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
+      z-index: -1;
+    }
+    
     .container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: var(--light-bg);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
       text-align: center;
       width: 90%;
-      max-width: 400px;
-
-      position: relative;
-      top: -40px; /* Sobe 40 pixels */
-     transform: translateY(-10%);
-
+      max-width: 500px;
+      transform: translateY(0);
+      animation: float 6s ease-in-out infinite;
+      transition: var(--transition);
     }
-
-    .record{
-      font-family: 'Open Sans', sans-serif;
-      font-size: 25px;
-      font-weight: bold;
-      margin-bottom: 20px;
-
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
     }
-
-    h1 {
-      font-family: 'Open Sans', sans-serif;
-
-      font-weight:700;
-      margin-bottom: 20px;
+    
+    .title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--primary-color);
     }
+    
+    .record {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      margin: 15px 0;
+      color: var(--secondary-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .recordNum {
+      font-size: 26px;
+      font-weight: 700;
+      margin-top: 5px;
+      color: var(--accent-color);
+    }
+    
     .counter {
-      font-size: 36px;
-      font-weight: bold;
-      margin: 30px;
+      font-size: 52px;
+      font-weight: 700;
+      margin: 25px 0;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 86, 179, 0.3);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
+    
     button {
-      background-color: #005F8A;
+      background: var(--primary-color);
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
+      padding: 12px 24px;
+      border-radius: 30px;
       cursor: pointer;
       font-size: 16px;
+      font-weight: 500;
       width: 100%;
-      max-width: 200px;
-      margin-top: 10px;
+      max-width: 220px;
+      margin-top: 15px;
+      transition: var(--transition);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
+    
     button:hover {
-      background-color: #a1a1a1;
+      background: var(--secondary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
     .hidden {
       display: none;
     }
+    
     .admin-panel {
-      margin-top: 20px;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
+    
     .admin-panel input {
-      padding: 8px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 12px 15px;
+      font-size: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 30px;
       width: 100%;
-      max-width: 200px;
-      margin-bottom: 10px;
+      max-width: 220px;
+      margin-bottom: 15px;
+      transition: var(--transition);
+      outline: none;
+    }
+    
+    .admin-panel input:focus {
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 3px rgba(0, 160, 233, 0.2);
     }
 
     /* Responsividade */
-    @media(max-width: 1000px)
-    {
-      body
-      {
-        background-image: url("./imagemVetorizada.svg");
+    @media(max-width: 1000px) {
+      body {
+         background: linear-gradient(135deg, #007cf0, #00dfd8);
         background-size: cover;
         background-repeat: no-repeat;
         background-position: top center;
-        height: auto;
-      }
-      .container
-      {
-
-        width: 100%;
-        max-width: 400;
-      }
-    }
-
-    @media(max-width: 720px)
-    {
-      body {
-        position:relative;
-        top: 500px;
-        background-image: url("./imagemVetorizada.svg");
-        background-size: cover;
-        background-repeat: none;
-        background-position: top center;
-        height: auto
-
-      };
-    }
-
-    @media(max-width: 650px)
-    {
-      body
-      {
-        position: relative;
-        top: 400px;
-        background-position: top center;
-
-      };
-
-    }
-
-    @media (max-width: 600px) {
-      body {
-        position: relative;
-        top: 400px; /*desce */
-        transform: translateY(+10%);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: top center;
-        height: auto;
-        background-image: url("./imagemVetorizada.svg");
-        height: auto;
-        padding: 20px;
       }
       .container {
-        
-        padding: 15px;
         width: 100%;
+        max-width: 450px;
+        margin-top: 50px;
+      }
+    }
+
+    @media(max-width: 768px) {
+      body {
+        background: linear-gradient(135deg, #007cf0, #00dfd8);
+        background-position: top center;
+        background-size: 150%;
+        min-height: 100vh;
+        padding-top: 280px;
+        align-items: flex-start;
+      }
+      .container {
+        margin-top: 0;
+        backdrop-filter: blur(5px);
+        max-width: 450px;
+      }
+      .counter {
+        font-size: 42px;
+        padding: 12px 20px;
+      }
+    }
+
+    @media(max-width: 576px) {
+      body {
+        padding-top: 220px;
+      }
+      .container {
+        padding: 15px;
         max-width: 350px;
       }
-      h1 {
-        font-size: 20px;
+      .title {
+        font-size: 24px;
+        margin-bottom: 10px;
       }
       .counter {
-        font-size: 30px;
-        margin: 20px;
+        font-size: 36px;
+        padding: 10px 15px;
+      }
+      .record {
+        font-size: 16px;
+        margin: 10px 0;
+      }
+      .recordNum {
+        font-size: 20px;
       }
       button {
         font-size: 14px;
-        padding: 8px;
-      }
-      .admin-panel input {
-        font-size: 12px;
-        padding: 6px;
+        padding: 10px 20px;
+        margin: 4px;
       }
     }
 
-    @media (max-width: 450px) {
+    @media(max-width: 400px) {
       body {
-        position: relative;
-        top: 300px; /*desce */
-        transform: translateY(+10%);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: top center;
-        height: auto;
-        background-image: url("./imagemVetorizada.svg");
-        height: auto;
-        padding: 20px;
+        padding-top: 180px;
       }
       .container {
-        
-        padding: 15px;
-        max-height: 175;
-        width: 100%;
-        max-width: 300px;
-      }
-      h1 {
-        font-size: 20px;
-      }
-      .counter {
-        font-size: 20px;
-        margin: 20px;
-      }
-      button {
-        font-size: 14px;
-        padding: 8px;
-      }
-      .admin-panel input {
-        font-size: 12px;
-        padding: 6px;
-      }
-    }
-
-
-    @media (max-width: 360px) {
-      body {
-        position: relative;
-        top: 220px; /*desce */
-        transform: translateY(+10%);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: top center;
-        height: auto;
-        background-image: url("./imagemVetorizada.svg");
-        height: auto;
         padding: 20px;
-      }
-      .container {
-        
-        padding: 15px;
-        max-height: 175;
-        width: 100%;
         max-width: 300px;
       }
-      h1 {
-        font-size: 15px;
+      .title {
+        font-size: 20px;
+        margin-bottom: 10px;
       }
       .counter {
-        font-size: 20px;
-        margin: 20px;
+        font-size: 32px;
+        margin: 15px 0;
+        padding: 8px 15px;
       }
-      button {
+      .record {
         font-size: 14px;
-        padding: 8px;
+      }
+      .recordNum {
+        font-size: 18px;
       }
       .admin-panel input {
+        padding: 8px 12px;
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 8px 16px;
         font-size: 12px;
-        padding: 6px;
+        margin: 4px;
       }
     }
     
+    /* Animações e efeitos */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
     
   </style>
 </head>
 <body>
   <div class="container">
-
-    <div class="counter" id="counter">Carregando...</div>
-    <div class="record" id="record">Recorde de dias:<div class="recordNum"></div>
- 
-  </div>
+    <h1 class="title">Dias Sem Acidente</h1>
+    <div class="counter-container">
+      <div class="counter" id="counter"><i class="fas fa-stopwatch"></i> Carregando...</div>
+    </div>
+    <div class="record" id="record"><i class="fas fa-trophy"></i> Recorde de dias:<div class="recordNum"></div>
+    </div>
     <div id="adminPanel" class="admin-panel hidden">
       <input type="text" id="dateInput" placeholder="dd/mm/aaaa" />
-      <button onclick="setAccidentDate()">Atualizar Data</button>
-      <button onclick="logoutAdmin()">Sair</button>
+      <button onclick="setAccidentDate()"><i class="fas fa-calendar-alt"></i> Atualizar Data</button>
+      <button onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Sair</button>
     </div>
-    <button id="adminButton" onclick="checkAdmin()">Entrar como Admin</button>
+    <button id="adminButton" onclick="checkAdmin()"><i class="fas fa-user-shield"></i> Entrar como Admin</button>
   </div>
 
  <script>
 
   let BACKEND_URL;
 
-    const INTERNAL_BACKEND = "http://localhost:3002";
-    const EXTERNAL_BACKEND = "http://";
+    const INTERNAL_BACKEND = "http://localhost";
+    const EXTERNAL_BACKEND = "";
 
       const recordNum = document.querySelector(".recordNum");
 
@@ -295,11 +341,13 @@
         if (data.lastAccident) {
           updateCounter(data.lastAccident);
         } else {
-          document.getElementById('counter').textContent = "Nenhuma data registrada.";
+          document.getElementById('counter').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Nenhuma data registrada.';
+          document.getElementById('counter').style.color = "#ef4444";
         }
       } catch (error) {
         console.error("Erro ao buscar a data do último acidente:", error);
-        document.getElementById('counter').textContent = "Erro ao carregar.";
+        document.getElementById('counter').innerHTML = '<i class="fas fa-exclamation-circle"></i> Erro ao carregar.';
+        document.getElementById('counter').style.color = "#ef4444";
       }
     }
 
@@ -316,66 +364,148 @@
 
     function updateCounter(lastAccident) {
       const timeSince = getTimeSince(lastAccident);
-      document.getElementById('counter').textContent = `${timeSince.days}d ${timeSince.hours}h ${timeSince.minutes}m ${timeSince.seconds}s`;
+      const counterElement = document.getElementById('counter');
+      
+      // Adiciona animação de pulso durante a atualização
+      counterElement.classList.add('pulse');
+      
+      // Atualiza o contador com ícone e formatação melhorada
+      counterElement.innerHTML = `<i class="fas fa-stopwatch"></i> ${timeSince.days}d ${timeSince.hours}h ${timeSince.minutes}m`;
+      
+      // Remove a animação após 2 segundos
+      setTimeout(() => {
+        counterElement.classList.remove('pulse');
+      }, 2000);
     }
 
-    async function setAccidentDate() {
-      const dateInput = document.getElementById('dateInput').value;
-      const dateParts = dateInput ? dateInput.split("/") : null;
-      if (dateParts && dateParts.length === 3) {
-        const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T00:00:00`;
-        try {
-          const response = await fetch(`${BACKEND_URL}/accident`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ date: formattedDate }),
-          });
-          const result = await response.json();
-          alert(result.message);
-          updateCounter(formattedDate);
-        } catch (error) {
-          console.error("Erro ao atualizar a data:", error);
-        }
-      } else {
-        alert("Formato inválido. Use dd/mm/aaaa.");
-      }
+   async function setAccidentDate() {
+  const dateInput = document.getElementById('dateInput').value;
+  const dateParts = dateInput ? dateInput.split("/") : null;
+
+  if (dateParts && dateParts.length === 3) {
+    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T00:00:00`;
+
+    try {
+      // 1️⃣ Atualiza a data do último acidente no backend
+      const response = await fetch(`${BACKEND_URL}/accident`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: formattedDate }),
+      });
+
+      const result = await response.json();
+      showNotification(result.message, "success");
+
+      // 2️⃣ Atualiza contador com a nova data
+      updateCounter(formattedDate);
+
+      // 3️⃣ Busca o record atual do backend
+      const recordResponse = await fetch(`${BACKEND_URL}/record`);
+      const recordData = await recordResponse.json();
+
+      // 4️⃣ Calcula novo record baseado nos dias decorridos desde a nova data
+      const diasPassados = Math.floor((new Date() - new Date(formattedDate)) / (1000 * 60 * 60 * 24));
+      let novoRecord = Math.max(0, recordData.recordDays - diasPassados);
+
+      // 5️⃣ Atualiza no DOM
+      recordNum.innerText = novoRecord;
+
+      // 6️⃣ Envia o novo record para o backend
+      await fetch(`${BACKEND_URL}/record`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recordDays: novoRecord }),
+      });
+
+      console.log(`✅ Novo record (${novoRecord} dias) atualizado no backend.`);
+
+    } catch (error) {
+      console.error("❌ Erro ao atualizar a data ou o record:", error);
+      showNotification("Erro ao atualizar os dados", "error");
     }
+
+  } else {
+    showNotification("Formato inválido. Use dd/mm/aaaa.", "error");
+  }
+}
 
     function checkAdmin() {
       const isAdmin = prompt("Digite a senha de administrador:") === "admin";
       if (isAdmin) {
         document.getElementById('adminPanel').classList.remove('hidden');
         document.getElementById('adminButton').classList.add('hidden');
+        showNotification("Modo administrador ativado", "success");
       } else {
-        alert("Acesso negado.");
+        showNotification("Acesso negado", "error");
       }
     }
 
     function logoutAdmin() {
       document.getElementById('adminPanel').classList.add('hidden');
       document.getElementById('adminButton').classList.remove('hidden');
-      alert("Você saiu do modo administrador.");
+      showNotification("Você saiu do modo administrador", "info");
     }
 
-   async function atualizaRecord()
-    {
-      try {
-        const response = await fetch(`${BACKEND_URL}/record`);
-        const recordSalvo = await response.json();
-
-        recordNum.innerText = recordSalvo.recordDays;
-
-      } catch (error) {
-        console.error("Erro ao buscar ultimo recorde:", error);
-        
+   
+    
+    // Função para mostrar notificações estilizadas
+    function showNotification(message, type) {
+      // Remove notificações anteriores
+      const existingNotification = document.querySelector('.notification');
+      if (existingNotification) {
+        existingNotification.remove();
       }
+      
+      // Cria o elemento de notificação
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      
+      // Define o ícone baseado no tipo
+      let icon = '';
+      if (type === 'success') {
+        icon = '<i class="fas fa-check-circle"></i>';
+        notification.style.backgroundColor = 'rgba(16, 185, 129, 0.9)';
+      } else if (type === 'error') {
+        icon = '<i class="fas fa-exclamation-circle"></i>';
+        notification.style.backgroundColor = 'rgba(239, 68, 68, 0.9)';
+      } else {
+        icon = '<i class="fas fa-info-circle"></i>';
+        notification.style.backgroundColor = 'rgba(59, 130, 246, 0.9)';
+      }
+      
+      notification.innerHTML = `${icon} ${message}`;
+      notification.style.position = 'fixed';
+      notification.style.bottom = '20px';
+      notification.style.right = '20px';
+      notification.style.padding = '12px 20px';
+      notification.style.borderRadius = '8px';
+      notification.style.color = 'white';
+      notification.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+      notification.style.zIndex = '1000';
+      notification.style.fontFamily = '"Montserrat", sans-serif';
+      notification.style.fontWeight = '500';
+      notification.style.display = 'flex';
+      notification.style.alignItems = 'center';
+      notification.style.gap = '8px';
+      
+      document.body.appendChild(notification);
+      
+      // Remove a notificação após 3 segundos
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateY(20px)';
+        notification.style.transition = 'all 0.5s ease';
+        setTimeout(() => notification.remove(), 500);
+      }, 3000);
     }
 
     defineBackendURL();
 
-    atualizaRecord();
+   
     setInterval(atualizaRecord,10000);
     
+    // Adiciona classe fade-in ao container para animação inicial
+    document.querySelector('.container').classList.add('fade-in');
 
   </script>
 </body>
